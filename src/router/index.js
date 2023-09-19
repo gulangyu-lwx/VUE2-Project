@@ -13,6 +13,7 @@ const shopList = r => require.ensure([], () => r(require('@/page/shopList')), 's
 const foodList = r => require.ensure([], () => r(require('@/page/foodList')), 'foodList');
 const orderList = r => require.ensure([], () => r(require('@/page/orderList')), 'orderList');
 const adminList = r => require.ensure([], () => r(require('@/page/adminList')), 'adminList');
+const diguiList = r => require.ensure([], () => r(require('@/page/diguiList')), 'diguiList');
 const visitor = r => require.ensure([], () => r(require('@/page/visitor')), 'visitor');
 const newMember = r => require.ensure([], () => r(require('@/page/newMember')), 'newMember');
 const uploadImg = r => require.ensure([], () => r(require('@/page/uploadImg')), 'uploadImg');
@@ -61,6 +62,10 @@ const routes = [
 		},{
 			path: '/adminList',
 			component: adminList,
+			meta: ['数据管理', '管理员列表'],
+		},{
+			path: '/diguiList',
+			component: diguiList,
 			meta: ['数据管理', '管理员列表'],
 		},{
 			path: '/visitor',

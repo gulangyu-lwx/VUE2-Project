@@ -1,116 +1,80 @@
 <template>
-    <div class="fillcontain">
-        <head-top></head-top>
-        <div class="table_container">
-            <el-table
-		      :data="tableData"
-		      style="width: 100%">
-		      <el-table-column
-		        prop="user_name"
-		        label="姓名"
-		        width="180">
-		      </el-table-column>
-		      <el-table-column
-		        prop="create_time"
-		        label="注册日期"
-		        width="220">
-		      </el-table-column>
-              <el-table-column
-                prop="city"
-                label="地址"
-                width="180">
-              </el-table-column>
-		      <el-table-column
-		        prop="admin"
-		        label="权限">
-		      </el-table-column>
-		    </el-table>
-		    <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="20"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
-        </div>
+  <div id="app">
+    <div v-for="(question, index) in questions" :key="index">
+      <h2>{{ question.question }}</h2>
+      <ul>
+        <li v-for="(option, optionIndex) in question.options" :key="optionIndex">
+          {{ option.text }}
+          <ul v-if="option.subQuestions">
+            <li v-for="(subQuestion, subQuestionIndex) in option.subQuestions" :key="subQuestionIndex">
+              <h4>{{ subQuestion.question }}</h4>
+              <ul>
+                <li v-for="(subOption, subOptionIndex) in subQuestion.options" :key="subOptionIndex">
+                  {{ subOption.text }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
+  </div>
 </template>
 
 <script>
-    import headTop from '../components/headTop'
-    import {adminList, adminCount} from '@/api/getData'
-    export default {
-        data(){
-            return {
-                tableData: [],
-                currentRow: null,
-                offset: 0,
-                limit: 20,
-                count: 0,
-                currentPage: 1,
-            }
-        },
-    	components: {
-    		headTop,
-    	},
-        created(){
-            this.initData();
-        },
-        methods: {
-            async initData(){
-                try{
-                    const countData = await adminCount();
-                    if (countData.status == 1) {
-                        this.count = countData.count;
-                    }else{
-                        throw new Error('获取数据失败');
-                    }
-                    this.getAdmin();
-                }catch(err){
-                    console.log('获取数据失败', err);
-                }
+export default {
+  data() {
+    return {
+      questions: [
+        {
+          question: "问题1", ///
+          id:1001, // 
+          parentId:0,
+          options: [    ///
+            {
+              text: "选项1",
+              id:1002,
+              parentId:1001,
+              subQuestions: [
+                {
+                  question: "子问题1",
+                  id:1003,
+                  parentId:1002,
+                  options: [
+                    { text: "子问题1选项1" },
+                    { text: "子问题1选项2" },
+                    // 更多子问题1的选项...
+                  ]
+                },
+                {
+                  question: "子问题2",
+                  options: [
+                    { text: "子问题2选项1" },
+                    { text: "子问题2选项2" },
+                    // 更多子问题2的选项...
+                  ]
+                },
+                // 更多子问题...
+              ]
             },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            {
+              text: "选项2",
+              subQuestions: [
+                // 其他选项的子问题...
+              ]
             },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
-                this.getAdmin()
-            },
-            async getAdmin(){
-                try{
-                    const res = await adminList({offset: this.offset, limit: this.limit});
-                    if (res.status == 1) {
-                    	this.tableData = [];
-                    	res.data.forEach(item => {
-                    		const tableItem = {
-                    			create_time: item.create_time,
-						        user_name: item.user_name,
-						        admin: item.admin,
-                                city: item.city,
-                    		}
-                    		this.tableData.push(tableItem)
-                    	})
-                    }else{
-                    	throw new Error(res.message)
-                    }
-                }catch(err){
-                    console.log('获取数据失败', err);
-                }
-            }
+            // 更多选项...
+          ]
         },
-    }
+        {
+          question: "问题2",
+          options: [
+            // 其他问题的选项...
+          ]
+        },
+        // 更多问题...
+      ]
+    };
+  }
+};
 </script>
-
-<style lang="less">
-	@import '../style/mixin';
-    .table_container{
-        padding: 20px;
-    }
-</style>
-
-

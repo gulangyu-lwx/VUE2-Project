@@ -9,10 +9,11 @@
       >
         <div
           slot="header"
-          style="display: flex; justify-content: space-between"
+          class="cards"
         >
           <span>{{ item.title }}</span>
           <span>{{ item.date }}</span>
+          
         </div>
         <div>{{ item.content }}</div>
       </el-card>
@@ -211,3 +212,27 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.cards{
+ display: flex; 
+ justify-content: space-between;
+}
+.cards:hover{
+  display: none;
+}
+.show_card{
+  display: none;
+}
+.show_card:hover{
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+</style>
